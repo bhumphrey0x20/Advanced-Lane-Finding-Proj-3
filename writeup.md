@@ -57,9 +57,9 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 #### 1. Provide an example of a distortion-corrected image.
 
 Distortion correction was applied to Image 9 below, using the same transformation matrix used the the chessboard images. The output is also shown below 
-![Distorted Image][./output_images/Distorted_Image.jpg]
-![Distorted Image][Undistorted_Image.jpg]
-
+![Distorted Image][output_images/Distorted_Image.jpg]
+![Distorted Image][output_images/Undistorted_Image.jpg]
+![png](output_9_1.png)
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
