@@ -71,24 +71,10 @@ For line detection, the RGB test images was converted to HLS color-space. A trap
 
 A perspective transform was performed on the binary image using function called `warp_img()`. The function takes in source points (src_pts) and destination points (dst_pts) to calculate a transormation matrix (M) using  the function cv2.getPerspectiveTransormation().  The matrix is then used with cv2.warpPerspective() to warp the binary image.
 
-Originally, the ROI points were used for src_pts and the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting (see below). Therefore, the src_pts and dst_pts were determined through trial-and-error.
+Originally, the ROI points were used for src_pts and the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting (see below). Therefore, the src_pts and dst_pts were determined through trial-and-error. The images below show the warped images on a straight lane line image and a curved lane line images. 
 
 
-, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
-
-```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
-```
-[Figure 1: Source and Destination Points for Matrix Transformation]
+[Table 1: Source and Destination Points for Matrix Transformation]
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
@@ -97,13 +83,18 @@ dst = np.float32(
 | 250, 670      | 375, 670      |
 | 1030, 670     | 1180, 670     |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-![alt text][image4]
+
+![Warped Image with Straight Lane Line][image4]
+
+![Warped Image with Curved Lane Line][image5]
+
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+To determine the lane lines, the warped image was passed to the function find_lane_lines(). This function used the histogram method described in the lecture, then fit a second order polynomial to the lane lines. The values of the lines and polynomial coefficients were stored in a Line() class. During the video processing pipeline, the three most recent values of the fit lines were stored and average of these used to draw the located lines. This was done to filter out jitter. 
+
+Finally, to mark the driving lane, the left and right fit lines were passed to cv2.polyfill() to color the lane. Then the lane was unwarped back to it's original perspective using warp_img() with the src_pts and dst_pts arguments swaped. 
 
 ![alt text][image5]
 
