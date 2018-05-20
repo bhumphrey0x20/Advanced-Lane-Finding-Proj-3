@@ -1,6 +1,3 @@
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
 
 ---
 
@@ -49,20 +46,24 @@ I start by preparing "object points", which will be the (x, y, z) coordinates of
 
 I then used the output `objpoints` and `imgpoints` to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  I applied this distortion correction to the test image using the `cv2.undistort()` function and obtained this result: 
 
-![distplay] (./output_images/calibration1.jpg) "Distorted Chessboard"
-![Undistorted Chessboard][./output_images/Undistorted_chessboard.jpg]
 
 ### Pipeline (single images)
 
 #### 1. Provide an example of a distortion-corrected image.
 
 Distortion correction was applied to Image 9 below, using the same transformation matrix used the the chessboard images. The output is also shown below 
-![jpg][output_images/Distorted_Image.jpg]
-![jpg][output_images/Undistorted_Image.jpg]
-![png](output_9_1.png)
+
+![Image 6: Distorted Chessboard Image] (./output_images/calibration1.jpg)
+![Image 7: Undistorted Chessboard](./output_images/Undistorted_chessboard.jpg)
+
+
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+For lane line identification, images in four color spaces (RGB, YUV, HSV, and HLS) were tested to determined which was best in detecting lane lines with a gradient operator and thresholding. Of the four, HLS more consistantly yielded both left and right lane lines.
+
+For line detection, the RGB test images was converted to HLS color-space. A trapazoid-shaped region-of-interest (ROI) was created to filter out additional background features such as trees and hills, and just show the road. The size of the ROI was based on visual inpection of the test images. Next, the gradient of the L-channel was performed using the Sobel operator in the X-direction. Then the absolute value of the image was calculated, the image was scaled to a value of 255, and the image was thresholded to yield a binary image. The S-channel image was simply thresholded to create another binary image. Then both binary images were multiplied by 255 and ORed together. The ORed images visually showed both left and right lanes. 
+
+
 
 ![alt text][image3]
 
