@@ -37,7 +37,7 @@ The goals / steps of this project are the following:
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
 
-The follow is a write up of Project 3.
+The follow is a write up of Project 3. Additionally, a README file is located in the main part of this repository.
 
 ### Camera Calibration
 
@@ -56,9 +56,9 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![Distorted Chessboard][Undistorted_chessboard.jpg]
-![Distorted Chessboard][Undistorted_chessboard.jpg]
+Distortion correction was applied to Image 9 below, using the same transformation matrix used the the chessboard images. The output is also shown below 
+![Distorted Image][./output_images/Distorted_Image.jpg]
+![Distorted Image][Undistorted_Image.jpg]
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
