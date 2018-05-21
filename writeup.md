@@ -44,34 +44,39 @@ The code for this step is contained in the second code cell under the title "Cam
 
 "object points" were prepared, which were the (x, y, z) coordinates of the chessboard corners. It is assumed that the chessboard was fixed on the (x, y) plane at z=0, such that the object points were the same for each calibration image.  Thus, `objp` was just a replicated array of coordinates, and `objpoints` was appended with a copy of it every successful detection chessboard corners in a test image.  `imgpoints` was appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
-The output `objpoints` and `imgpoints` were used to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  This distortion correction was applied to the test image using the `cv2.undistort()` function and obtained this result: 
+The output `objpoints` and `imgpoints` were used to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  This distortion correction was applied to the test image using the `cv2.undistort()` function and obtained the result: 
 
+![Image 6: Distorted Chessboard Image] (./output_images/test2.jpg)
+![Image 7: Undistorted Chessboard](./output_images/Undistorted_chessboard.jpg)
 
 ### Pipeline (single images)
 
 #### 1. Provide an example of a distortion-corrected image.
 
-Distortion correction was applied to Image 9 below, using the same transformation matrix used the the chessboard images. The output is also shown below 
+Distortion correction was applied to Image 8 below, using the same distortion coefficients used the the chessboard images. The output is also shown below: 
 
-![Image 6: Distorted Chessboard Image] (./output_images/calibration1.jpg)
-![Image 7: Undistorted Chessboard](./output_images/Undistorted_chessboard.jpg)
+![Image 8: Distorted Test Image] (./output_images/calibration1.jpg)
+![Image 9: Undistorted Test Image](./output_images/Unistorted_Image.jpg)
 
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-For lane line identification, images in four color spaces (RGB, YUV, HSV, and HLS) were tested to determined which was best in detecting lane lines with a gradient operator and thresholding. Of the four, HLS more consistantly yielded both left and right lane lines.
+For lane line identification, images in four color spaces (RGB, YUV, HSV, and HLS) were tested to determined which was best in detecting lane lines using a gradient operator and thresholding. Of the four, HLS more consistantly yielded both left and right lane lines.
 
-For line detection, the RGB test images was converted to HLS color-space. A trapazoid-shaped region-of-interest (ROI) was created to filter out additional background features such as trees and hills, and just show the road. The size of the ROI was based on visual inpection of the test images. Next, the gradient of the L-channel was performed using the Sobel operator in the X-direction. Then the absolute value of the image was calculated, the image was scaled to a value of 255, and the image was thresholded to yield a binary image. The S-channel image was simply thresholded to create another binary image. Then both binary images were multiplied by 255 and ORed together. The ORed images visually showed both left and right lanes. 
+RGB test images were converted to HLS color-space. A trapazoid-shaped region-of-interest (ROI) was created to filter out additional background features and just show the road in front of the car. The size of the ROI was based on visual inpection of the test images. Code may be view in the function `region_of_interest()` under the section "Functions for Image Manipulation" in Advanded_lane_finding.ipynb.
+
+Next, the gradient of the L-channel was performed using the Sobel operator in the X-direction. Then the absolute value of the image was calculated, the image was scaled to a values between 0 and 255, and the image was thresholded and multiplied to yield a "binary" image, with values of 0 and 255. The S-channel image was simply thresholded and multiplied by 255 to create another "binary" image (0 and 255). Code may be view in the function `get_binary()` under the section "Functions for Image Manipulation" in Advanded_lane_finding.ipynb.
+
+Then both binary images were ORed together to create a single binary image yielding both left and right lanes( see `pipline()` in section "Lane Finding Pipeline").
 
 
-
-![alt text][image3]
+![Image 10][image3]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-A perspective transform was performed on the binary image using function called `warp_img()`. The function takes in source points (src_pts) and destination points (dst_pts) to calculate a transormation matrix (M) using  the function cv2.getPerspectiveTransormation().  The matrix is then used with cv2.warpPerspective() to warp the binary image.
+A perspective transformation was performed on the binary image using the function `warp_img()` in section "Functions for Image Manipulation". The function takes in source points (src_pts) and destination points (dst_pts) to calculate a transormation matrix (M) using the function `cv2.getPerspectiveTransormation()`.  The matrix is then used with cv2.warpPerspective() to warp the binary image.
 
-Originally, the ROI points were used for src_pts and the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting (see below). Therefore, the src_pts and dst_pts were determined through trial-and-error. The images below show the warped images on a straight lane line image and a curved lane line images. 
+Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting (see below). Therefore, the src_pts and dst_pts were determined through trial-and-error (Table 1). The Images 11 and 10 show a straight image and the lane lines after the perspective transformation. 
 
 
 [Table 1: Source and Destination Points for Matrix Transformation]
@@ -85,20 +90,20 @@ Originally, the ROI points were used for src_pts and the dst_pts were derived fr
 
 
 
-![Warped Image with Straight Lane Line][image4]
+![Image 11: Image with Straight Lane Line][image4]
 
-![Warped Image with Curved Lane Line][image5]
+![Image 12: Perspective Transformation of Straight-Line Image][image5]
 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-To determine the lane lines, the warped image was passed to the function find_lane_lines(). This function used the histogram method described in the lecture, then fit a second order polynomial to the lane lines. The values of the lines and polynomial coefficients were stored in a Line() class. During the video processing pipeline, the three most recent values of the fit lines were stored and average of these used to draw the located lines. This was done to filter out jitter. 
+To determine the lane lines, the warped image was passed to the function `find_lane_lines()`, from section "Functions For Lane Detection and Marking". This function used the histogram method described in the lecture, then fit a second order polynomial to the lane lines. The values of the lines and polynomial coefficients were stored in a Line() Class (see section "Line() Class to Store and Handle Line Fitting and Curve Radius Calculations"). During the video processing pipeline, the three most recent values of the fit lines were stored and average of these used to draw the located lines. This was done to filter out jitter. 
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-To visually mark the driving lane, the left and right fit lines were passed to cv2.polyfill() to color the lane. Then the lane was unwarped back to it's original perspective using warp_img() with the src_pts and dst_pts arguments swaped. 
+To visually mark the driving lane, the left and right fit lines were passed the  `fill_lane()` (section "Functions For Lane Detection and Marking") which used `cv2.polyfill()` and `cv2.addWeighted()` to color the lane.  The warped lane was transformed back into it's original perspective using `warp_img()` with the src_pts and dst_pts arguments swaped. 
 
-![alt text][image5]
+![image 13: Image with colored Lane]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
