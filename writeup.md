@@ -94,19 +94,17 @@ Originally, the ROI points were used for src_pts and the dst_pts were derived fr
 
 To determine the lane lines, the warped image was passed to the function find_lane_lines(). This function used the histogram method described in the lecture, then fit a second order polynomial to the lane lines. The values of the lines and polynomial coefficients were stored in a Line() class. During the video processing pipeline, the three most recent values of the fit lines were stored and average of these used to draw the located lines. This was done to filter out jitter. 
 
-Finally, to mark the driving lane, the left and right fit lines were passed to cv2.polyfill() to color the lane. Then the lane was unwarped back to it's original perspective using warp_img() with the src_pts and dst_pts arguments swaped. 
+#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+
+To visually mark the driving lane, the left and right fit lines were passed to cv2.polyfill() to color the lane. Then the lane was unwarped back to it's original perspective using warp_img() with the src_pts and dst_pts arguments swaped. 
 
 ![alt text][image5]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+The radius of the curve was calculated during the lane line polynomial fitting using Line class funtion `left_right_fit()` and `add_radius()`. A 3-point moving average was used to determine the radius 
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
-
-![alt text][image6]
 
 ---
 
