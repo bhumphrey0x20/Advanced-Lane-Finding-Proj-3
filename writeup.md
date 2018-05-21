@@ -107,9 +107,9 @@ To visually mark the driving lane, the left and right fit lines were passed the 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-The radius of the curve was calculated during the lane line polynomial fitting using Line class funtion `left_right_fit()` and `add_radius()`. A 3-point moving average was used to determine the radius 
+The radius of the curve was calculated during the lane line polynomial fitting using Line class funtions `left_right_fit()` and `add_radius()`. A 3-point moving average was used to smooth radius calculations during video processing. 
 
-
+`Radius of curve =( (1+(2Ay+B)2)3/2 ) / ∣2A∣`
 
 ---
 
