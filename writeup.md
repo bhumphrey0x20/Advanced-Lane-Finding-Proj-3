@@ -54,7 +54,17 @@ The output `objpoints` and `imgpoints` were used to compute the camera calibrati
 
 ### Pipeline (single images)
 
-The pipeline for lane detection and marking can be found in section "Lane Finding Pipeline". The steps in the pipeline are discussed below.
+The pipeline for lane detection and marking can be found in section "Lane Finding Pipeline". The steps in the pipeline are discussed below, and include the following for advanced lane line dectection:
+
+* Undistort image
+* Get a region-of-interest
+* Create a binary image from HSL colorspace
+* Warp binay image
+* Find lane lines by fitting polynomial to warped image
+* Calculate radius of the curve
+* Color the lane between the lane lines
+* Warp image back to original perspective
+* Write radius of the curve in text on image
 
 #### 1. Provide an example of a distortion-corrected image.
 
