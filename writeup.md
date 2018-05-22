@@ -23,7 +23,7 @@ The goals / steps of this project are the following:
 
 ### Writeup / README
 
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
+#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
 
 The following is a write up of Project 3. Additionally, a README file containing the project summary is located in the main part of this repository. All code reference in this write up can be found in the IPython notebook "advanced_lane_finding.ipynb"
 
@@ -148,4 +148,10 @@ alt="Advanced Lane Finding Video" width="240" height="180" border="10" /></a>
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+The main issued faced during the development of the pipeline were:
+* fiding the corrent source and destination points for the perspective transformation (discussed briefly above)
+* Finding the corrent thresholding values to create a binary image
+* using a faster lane finding algorithm instead of the histogram method
+
+Another method to segment out the lane lines when creating a binary image was attempted. This invovled segmenting the yellow (left) lane line in the video and images using a lower and upper threshold for yellow in the HSV color space, as described in [Changing Colorspace] (http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html#converting-colorspaces). 
+
