@@ -26,7 +26,7 @@ The goals / steps of this project are the following:
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
+### Rubric points are considered individually and each point's implementation is described below.  
 
 ---
 
@@ -34,17 +34,17 @@ The goals / steps of this project are the following:
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
 
-The follow is a write up of Project 3. Additionally, a README file is located in the main part of this repository.
+The following is a write up of Project 3. Additionally, a README file containing the project summary is located in the main part of this repository.
 
 ### Camera Calibration
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the second code cell under the title "Camera Calibration Using Chessboard Images" of the IPython notebook located in "advanced_lane_finding.ipynb" (or in lines # through # of the file called `advanced_lane_finding.py`). This code was provided in Udacity Self-Driving Car, Term1, Lesson 15. 
+The code for this step is contained in the second code cell, under the title "Camera Calibration Using Chessboard Images", in the IPython notebook located in "advanced_lane_finding.ipynb". This code was provided in Udacity Self-Driving Car, Term1, Lesson 15. 
 
 "object points" were prepared, which were the (x, y, z) coordinates of the chessboard corners. It is assumed that the chessboard was fixed on the (x, y) plane at z=0, such that the object points were the same for each calibration image.  Thus, `objp` was just a replicated array of coordinates, and `objpoints` was appended with a copy of it every successful detection chessboard corners in a test image.  `imgpoints` was appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
-The output `objpoints` and `imgpoints` were used to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  This distortion correction was applied to the test image using the `cv2.undistort()` function and obtained the result: 
+The output `objpoints` and `imgpoints` were used to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  This distortion correction was applied to the test image using the `cv2.undistort()` function and obtained the following results: 
 
 #### Image 6: Distorted Chessboard Image
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/calibration1.jpg" alt="Chess" height="120" width="240" />
