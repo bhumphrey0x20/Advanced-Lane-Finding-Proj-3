@@ -153,5 +153,8 @@ The main issued faced during the development of the pipeline were:
 * Finding the corrent thresholding values to create a binary image
 * using a faster lane finding algorithm instead of the histogram method
 
-Another method to segment out the lane lines when creating a binary image was attempted. This invovled segmenting the yellow (left) lane line in the video and images using a lower and upper threshold for yellow in the HSV color space, as described in [Changing Colorspace] (http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html#converting-colorspaces). 
+Another method to segment out the lane lines when creating a binary image was attempted. The idea was to make the segmentation of the colored lines (e.g. yellow and white) more robust. This invovled segmenting the yellow (left) lane line in the video and images using a lower and upper threshold for yellow in the HSV color space, as described in [Changing Colorspace](http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html#converting-colorspaces); and also with white lines using RGB color space. This was done in the funtion `get_color_2_binary()` in section "Functions for Image Manipulation". Line segementaion was successful using test images, however broke down during the project_video.mp4, the pipeline stopped marking/failed to mark the lane lines altogether. 
+
+Another issue was using the function `find_lane_lines_quick()` which used the line values from previous line detections methods (e.g. `find_lane_line()` ) to more rapidly fit polynomials to the lane lines (second method described in lecture). However, this created a pronounced distortion in the drawing the lane in the video, starting at about 43 seceonds and lasting 1-2 seconds. Use of only `find_lane_lines()` also experienced some distortion in the secton of frames, but was less pronounced. 
+
 
