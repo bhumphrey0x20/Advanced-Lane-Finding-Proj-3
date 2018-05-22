@@ -46,10 +46,10 @@ The code for this step is contained in the second code cell under the title "Cam
 
 The output `objpoints` and `imgpoints` were used to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  This distortion correction was applied to the test image using the `cv2.undistort()` function and obtained the result: 
 
-####Image 6: Distorted Chessboard Image]
+#### Image 6: Distorted Chessboard Image
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/calibration1.jpg" height="120 width="240" />
 
-####Image 7: Undistorted Chessboard
+#### Image 7: Undistorted Chessboard
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/Undistorted_chessboard.jpg" height="120" width="240" />
 
 ### Pipeline (single images)
@@ -58,7 +58,9 @@ The output `objpoints` and `imgpoints` were used to compute the camera calibrati
 
 Distortion correction was applied to Image 8 below, using the same distortion coefficients used the the chessboard images. The output is also shown below: 
 
-![Image 8: Distorted Test Image] (./output_images/calibration1.jpg)
+####Image 8: Distorted Test Image 
+<img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/Distorted_Image.jpg" height="120 width="240" />
+
 ![Image 9: Undistorted Test Image](./output_images/Unistorted_Image.jpg)
 
 
