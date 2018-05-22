@@ -37,10 +37,10 @@ The code for this step is contained in the second code cell, under the title "Ca
 
 The output `objpoints` and `imgpoints` were used to compute the camera calibration and distortion coefficients using the `cv2.calibrateCamera()` function.  This distortion correction was applied to the test image using the `cv2.undistort()` function and obtained the following results: 
 
-#### Image 1: Distorted Chessboard Image
+#### Figure 1: Distorted Chessboard Image
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/calibration1.jpg" alt="Chess" height="120" width="240" />
 
-#### Image 2: Undistorted Chessboard
+#### Figure 2: Undistorted Chessboard
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/Undistorted_chessboard.jpg" height="120" width="240" />
 
 ### Pipeline (single images)
@@ -59,12 +59,12 @@ The pipeline for lane detection and marking can be found in section "Lane Findin
 
 #### 1. Provide an example of a distortion-corrected image.
 
-Distortion correction was applied to Image 8 below, by applying the distortion coefficients calculated in the chessboard images. The corrected image (Image 9) is also shown below: 
+Distortion correction was applied to Figure 3 below, by applying the distortion coefficients calculated in the chessboard images. The corrected image (Figure 4) is also shown below: 
 
-#### Image 3: Distorted Test Image 
+#### Figure 3: Distorted Test Image 
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/Distorted_Image.jpg" height="120" width="240" />
 
-#### Image 4: Undistorted Test Image
+#### Figure 4: Undistorted Test Image
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/Unistorted_Image.jpg" height="120" width="240" />
 
 
@@ -72,7 +72,7 @@ Distortion correction was applied to Image 8 below, by applying the distortion c
 
 For lane line identification, images in four color spaces (RGB, YUV, HSV, and HLS) were tested to determined which was best in detecting lane lines using a gradient operator and thresholding. Of the four, HLS more consistantly yielded both left and right lane lines.
 
-#### Image 5: Color Space Images
+#### Figure 5: Color Space Images
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/ColorSpaces.png" height="941" width="1000" />
 
 
@@ -87,7 +87,7 @@ Finally, in the pipeline a single-channel binary image was created by logical OR
 
 A perspective transformation was performed on the binary image using the function `warp_img()` in section "Functions for Image Manipulation". The function takes in source points (src_pts) and destination points (dst_pts) to calculate a transormation matrix (M) using the function `cv2.getPerspectiveTransormation()`.  The matrix is then used with `cv2.warpPerspective()` to warp the binary image.
 
-Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting. Therefore, the src_pts and dst_pts (Table 1) were determined through trial-and-error. Images 11 and 10 show a straight image and the lane lines after the perspective transformation of it's binary image. 
+Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting. Therefore, the src_pts and dst_pts (Table 1) were determined through trial-and-error. Figures 5 show a straight image and the lane lines after the perspective transformation of it's binary image. 
 
 
 [Table 1: Source and Destination Points for Matrix Transformation]
@@ -101,7 +101,7 @@ Originally, the ROI points were used for src_pts while the dst_pts were derived 
 
 
 
-#### Image 5: Binary Images of Unwarped and Warped Perspective 
+#### Figure 5: Binary Images of Unwarped and Warped Perspective 
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/bin_warp2.png" height="349" width="918" />
 
 
@@ -110,7 +110,7 @@ Originally, the ROI points were used for src_pts while the dst_pts were derived 
 
 To determine the lane lines, the warped image was passed to the function `find_lane_lines()`, in section "Functions For Lane Detection and Marking". This function used the histogram method described in the lecture, then fit a second order polynomial to the lane lines. The values of the lines and polynomial coefficients were stored in a Line() Class (see section "Line() Class to Store and Handle Line Fitting and Curve Radius Calculations"). To reduce jitter during video processing, the three most recent values of the fit lines were stored in the Line class. The average of the three were used to draw the located lines on each video frame. 
 
-#### Image 5: Lane Lines on Binary Warped Image: Histogram Method
+#### Figure 6: Lane Lines on Binary Warped Image: Histogram Method
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/laneLines_histMethod.png" height="480" width="640" />
 
 
@@ -118,10 +118,10 @@ To determine the lane lines, the warped image was passed to the function `find_l
 
 To visually mark the driving lane, the left and right fit lines were passed the  `fill_lane()` (section "Functions For Lane Detection and Marking") which used `cv2.polyfill()` and `cv2.addWeighted()` to color the lane, or area between the fitted lane lines in the warped image.  This image was transformed back into its original perspective using `warp_img()` with the original src_pts and dst_pts arguments swaped. 
 
-#### Figure 6: Original Image
+#### Figure 7: Original Image
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/lane_noFill.png" height="705" width="750" />
 
-#### Figure 7: Image with Lane Colored
+#### Figure 8: Image with Lane Colored
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/lane_Fill.png" height="705" width="750" />
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
