@@ -34,13 +34,13 @@ The goals / steps of this project are the following:
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
 
-The following is a write up of Project 3. Additionally, a README file containing the project summary is located in the main part of this repository.
+The following is a write up of Project 3. Additionally, a README file containing the project summary is located in the main part of this repository. All code reference in this write up can be found in the IPython notebook "advanced_lane_finding.ipynb"
 
 ### Camera Calibration
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
-The code for this step is contained in the second code cell, under the title "Camera Calibration Using Chessboard Images", in the IPython notebook located in "advanced_lane_finding.ipynb". This code was provided in Udacity Self-Driving Car, Term1, Lesson 15. 
+The code for this step is contained in the second code cell, under the title "Camera Calibration Using Chessboard Images". This code was provided in Udacity Self-Driving Car, Term1, Lesson 15. 
 
 "object points" were prepared, which were the (x, y, z) coordinates of the chessboard corners. It is assumed that the chessboard was fixed on the (x, y) plane at z=0, such that the object points were the same for each calibration image.  Thus, `objp` was just a replicated array of coordinates, and `objpoints` was appended with a copy of it every successful detection chessboard corners in a test image.  `imgpoints` was appended with the (x, y) pixel position of each of the corners in the image plane with each successful chessboard detection.  
 
@@ -54,9 +54,11 @@ The output `objpoints` and `imgpoints` were used to compute the camera calibrati
 
 ### Pipeline (single images)
 
+The pipeline for lane detection and marking can be found in section "Lane Finding Pipeline". The steps in the pipeline are discussed below.
+
 #### 1. Provide an example of a distortion-corrected image.
 
-Distortion correction was applied to Image 8 below, using the same distortion coefficients used the the chessboard images. The output is also shown below: 
+Distortion correction was applied to Image 8 below, by applying the distortion coefficients calculated in the chessboard images. The corrected image (Image 9) is also shown below: 
 
 #### Image 8: Distorted Test Image 
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/Distorted_Image.jpg" height="120" width="240" />
@@ -69,20 +71,20 @@ Distortion correction was applied to Image 8 below, using the same distortion co
 
 For lane line identification, images in four color spaces (RGB, YUV, HSV, and HLS) were tested to determined which was best in detecting lane lines using a gradient operator and thresholding. Of the four, HLS more consistantly yielded both left and right lane lines.
 
-RGB test images were converted to HLS color-space. A trapazoid-shaped region-of-interest (ROI) was created to filter out additional background features and just show the road in front of the car. The size of the ROI was based on visual inpection of the test images. Code may be view in the function `region_of_interest()` under the section "Functions for Image Manipulation" in Advanded_lane_finding.ipynb.
+RGB test images were converted to HLS color-space. The function `region_of_interest()` was used to segment out a trapazoid-shaped region-of-interest (ROI) encompassing primarily the road. The size of the ROI was based on visual inpection of the test images. Code may be view under the section "Functions for Image Manipulation".
 
-Next, the gradient of the L-channel was performed using the Sobel operator in the X-direction. Then the absolute value of the image was calculated, the image was scaled to a values between 0 and 255, and the image was thresholded and multiplied to yield a "binary" image, with values of 0 and 255. The S-channel image was simply thresholded and multiplied by 255 to create another "binary" image (0 and 255). Code may be view in the function `get_binary()` under the section "Functions for Image Manipulation" in Advanded_lane_finding.ipynb.
+Next, a 3-D binary image was created using the funtion `get_binary()` in section "Functions for Image Manipulation". The gradient of the L-channel was performed using the Sobel operator in the X-direction. Then the absolute value of the image was calculated. The image was scaled to a values between 0 and 255, thresholded, and multiplied by 255 to yield a "binary" image, of values 0 and 255. The S-channel image was simply thresholded and multiplied by 255 to create another "binary" image (0 and 255). 
 
-Then both binary images were ORed together to create a single binary image yielding both left and right lanes( see `pipline()` in section "Lane Finding Pipeline").
+Finally, in the pipeline a single-channel binary image was created by logical ORing the L- and S-channel binary images. This resulted in visually showing both left and right lanes ( see `pipline()` in section "Lane Finding Pipeline").
 
 
 ![Image 10][image3]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-A perspective transformation was performed on the binary image using the function `warp_img()` in section "Functions for Image Manipulation". The function takes in source points (src_pts) and destination points (dst_pts) to calculate a transormation matrix (M) using the function `cv2.getPerspectiveTransormation()`.  The matrix is then used with cv2.warpPerspective() to warp the binary image.
+A perspective transformation was performed on the binary image using the function `warp_img()` in section "Functions for Image Manipulation". The function takes in source points (src_pts) and destination points (dst_pts) to calculate a transormation matrix (M) using the function `cv2.getPerspectiveTransormation()`.  The matrix is then used with `cv2.warpPerspective()` to warp the binary image.
 
-Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting (see below). Therefore, the src_pts and dst_pts were determined through trial-and-error (Table 1). The Images 11 and 10 show a straight image and the lane lines after the perspective transformation. 
+Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting. Therefore, the src_pts and dst_pts (Table 1) were determined through trial-and-error. Images 11 and 10 show a straight image and the lane lines after the perspective transformation of it's binary image. 
 
 
 [Table 1: Source and Destination Points for Matrix Transformation]
@@ -103,19 +105,23 @@ Originally, the ROI points were used for src_pts while the dst_pts were derived 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-To determine the lane lines, the warped image was passed to the function `find_lane_lines()`, from section "Functions For Lane Detection and Marking". This function used the histogram method described in the lecture, then fit a second order polynomial to the lane lines. The values of the lines and polynomial coefficients were stored in a Line() Class (see section "Line() Class to Store and Handle Line Fitting and Curve Radius Calculations"). During the video processing pipeline, the three most recent values of the fit lines were stored and average of these used to draw the located lines. This was done to filter out jitter. 
+To determine the lane lines, the warped image was passed to the function `find_lane_lines()`, in section "Functions For Lane Detection and Marking". This function used the histogram method described in the lecture, then fit a second order polynomial to the lane lines. The values of the lines and polynomial coefficients were stored in a Line() Class (see section "Line() Class to Store and Handle Line Fitting and Curve Radius Calculations"). To reduce jitter during video processing, the three most recent values of the fit lines were stored in the Line class. The average of the three were used to draw the located lines on each video frame. 
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-To visually mark the driving lane, the left and right fit lines were passed the  `fill_lane()` (section "Functions For Lane Detection and Marking") which used `cv2.polyfill()` and `cv2.addWeighted()` to color the lane.  The warped lane was transformed back into it's original perspective using `warp_img()` with the src_pts and dst_pts arguments swaped. 
+To visually mark the driving lane, the left and right fit lines were passed the  `fill_lane()` (section "Functions For Lane Detection and Marking") which used `cv2.polyfill()` and `cv2.addWeighted()` to color the lane, or area between the fitted lane lines in the warped image.  This image was transformed back into its original perspective using `warp_img()` with the original src_pts and dst_pts arguments swaped. 
 
-![image 13: Image with colored Lane]
+![image 13: Original Image]
+![image 14: Image with colored Lane]
+
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-The radius of the curve was calculated during the lane line polynomial fitting using Line class funtions `left_right_fit()` and `add_radius()`. A 3-point moving average was used to smooth radius calculations during video processing. 
+The radius of the curve was calculated during the lane line polynomial fitting using Line class funtions `left_right_fit()` and `add_radius()`. A 3-point moving average was used to smooth radius calculations during video processing. The equation (below) was provided in lecture and calculated with respect to the y-axis as the points of the line along the x-axis were not monotonic. 
 
 `Radius of curve =( (1+(2Ay+B)2)3/2 ) / ∣2A∣`
+
+To convert pixel to meters, the variables ym_per_pix = 30/720 and self.xm_per_pix = 3.7/700 were used to multiply the x- and y-values of the lane lines during polynomial fitting. The radius of the curve was drawn on the each frame of the video using `cv2.putText()`.
 
 ---
 
