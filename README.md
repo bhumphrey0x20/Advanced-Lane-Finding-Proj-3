@@ -6,7 +6,7 @@
 This project uses python, numpy, and openCV to find, and mark lanes of a road. 
 
 The repository includes:
-*IPython notebook of code to identity the current driving lane of automobile
+*advanded_lane_finding.ipynb, IPython notebook of code to identity the current driving lane of automobile
 *README.md file 
 *Writeup.md, write up of the project
 *output_images, folder of image and video from the project
