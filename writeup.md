@@ -138,10 +138,7 @@ To convert pixel to meters, the variables ym_per_pix = 30/720 and self.xm_per_pi
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-
-
-<a href="https://youtu.be/b7sRDsfD6ZQ" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" 
-alt="Advanced Lane Finding Video" width="240" height="180" border="10" /></a>
+<a href="https://youtu.be/yIxWpOFOdh0" target="_blank"><img src="https://i9.ytimg.com/vi/yIxWpOFOdh0/1.jpg?sqp=CIDIkdgF&rs=AOn4CLC0qLDI3wvXhNW6te2mluWc09O3BA" alt="Advanced Lane Finding Video" width="240" height="180" border="10" /></a>
 ---
 
 ### Discussion
