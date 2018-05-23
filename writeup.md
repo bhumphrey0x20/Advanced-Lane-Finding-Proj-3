@@ -108,7 +108,11 @@ Originally, the ROI points were used for src_pts while the dst_pts were derived 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-To determine the lane lines, the warped image was passed to the function `find_lane_lines()`, in section "Functions For Lane Detection and Marking". This function used the histogram method described in the lecture, then fit a second order polynomial to the lane lines. The values of the lines and polynomial coefficients were stored in a Line() Class (see section "Line() Class to Store and Handle Line Fitting and Curve Radius Calculations"). To reduce jitter during video processing, the three most recent values of the fit lines were stored in the Line class. The average of the three were used to draw the located lines on each video frame. 
+To determine the lane lines, the warped image was passed to the function `find_lane_lines()`, in section "Functions For Lane Detection and Marking". This function used the histogram method described in the lecture. Next, coefficients corresponding to equation 1 were obtainded using `numpy.polyfit()`. Finally, the equation [1] of the line was calculated along the y-axis. The values of the polynomial coefficients and the lines values were stored in a Line class (see section "Line Class to Store and Handle Line Fitting and Curve Radius Calculations"). 
+
+
+
+To reduce jitter during video processing, the three most recent values of the fit lines were stored in the Line class. The average of the three were used to draw the located lines on each video frame. 
 
 #### Figure 6: Lane Lines on Binary Warped Image: Histogram Method
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/laneLines_histMethod.png" height="480" width="640" />
@@ -118,6 +122,9 @@ To determine the lane lines, the warped image was passed to the function `find_l
 
 To visually mark the driving lane, the left and right fit lines were passed the  `fill_lane()` (section "Functions For Lane Detection and Marking") which used `cv2.polyfill()` and `cv2.addWeighted()` to color the lane, or area between the fitted lane lines in the warped image.  This image was transformed back into its original perspective using `warp_img()` with the original src_pts and dst_pts arguments swaped. 
 
+#### [Equation 1]    `f(y) = A * y^2 + B * y + C`
+
+
 #### Figure 7: Original Image
 <img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/lane_noFill.png" height="315" width="460" />
 
@@ -126,12 +133,16 @@ To visually mark the driving lane, the left and right fit lines were passed the 
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-The radius of the curve was calculated during the lane line polynomial fitting using Line class funtions `left_right_fit()` and `add_radius()`. The equation (below) was provided in lecture and calculated with respect to the y-axis as the points of the line along the x-axis were not monotonic. 
+The radius of the curve was calculated during the lane line polynomial fitting using Line class funtions `left_right_fit()` and `add_radius()`. Three polynomial coefficients were obtained for both the left and right lanes using `numpy.polyfit` and correspond to A, B, and C of the equation. The average of each coeffiecient for. Then, the  The equation (below) was provided in lecture and calculated with respect to the y-axis as the points of the line along the x-axis were not monotonic. 
 
-`Radius of curve =( (1+(2Ay+B)2)3/2 ) / ∣2A∣`
+#### [Equation 2]    `Radius of curve =( (1+(2Ay+B)^2)^3/2 ) / ∣2A∣`
 
 To convert pixel to meters, the variables ym_per_pix = 30/720 and self.xm_per_pix = 3.7/700 were used to multiply the x- and y-values of the lane lines during polynomial fitting.  A 3-point weighted average was used to smooth radius calculations during video processing. The radius of the curve was drawn on the each frame of the video using `cv2.putText()`.
 
+The vehicle's offset (position of the vehicle with respect to the center of the lane) was calculated by finding the average center line then subtracting it from  the mid-point of the x-axis, assumed to be the actual center of the lane. The Line class function `calculate_offset()` used the rolling average polynomial coefficients, calculated from the radius of the curve, to calculate a center line according to Equation 1. The function used a y-value corresponding the bottom of the curve to obtain the position of the vehicle between the left and right lane lines. The y-value was converted into meters by multiplying it by `ym_per_px= 30/720`. The mid-point of the x-axis was converted to meters by mulitplying it by `xm_per_px = 3.7/700`. 
+
+During video processing the offset was drawn on each frame using `cv2.putText()`. Offsets with a negative value indicate the vehicle's center is right of the mid-point, while positive offsets indicate the vehicle's center is to the left of the mid-point. During the video the offset values were typically near -1 meters.
+ 
 ---
 
 ### Pipeline (video)
