@@ -163,17 +163,19 @@ The main issued faced during the development of the pipeline were:
 
 Improvements to the pipeline would include better lane line segmentation. In the video at about 43 seconds, there is distortion in the lane drawn on the video frames. This does not last for more that a second or two, but the distortion indicates that the fit lines ware incorrect, curving more to the left instead of to the right. 
 
-This occured in an area where there were shadows on the road from a tree, which was the probable cause of the lane fitting failure. The distortion was worse when using `find_lane_lines_quick()`. This function used the line values from previous line detection (e.g. `find_lane_line()` ) to more rapidly fit polynomials to the lane lines. For this reason `find_lane_lines_quick()` was not used in video processing. 
+This occured in an area where there were shadows on the road from a tree, which was the probable cause of the distortion. In the video the distortion was worse when using `find_lane_lines_quick()`. This function used the line values from previous line detection (e.g. `find_lane_line()` ) to more rapidly fit polynomials to the lane lines. For this reason `find_lane_lines_quick()` was not used in video processing. 
 
-Another probable point of failure would be the introduction of additional lines and features on the road, such as old faded lane lines, cracks or seams. Because the lane line segmentation used the gradient/ derivative of the black-and-white image find lines, areas where there is sharp changes in neighboring pixel values, such as these additional lines and features,  would show up in the gradient. In fact, the challenge_video.mp4 has a seam in the road. The pipeline was tested using the challenge video and the pipeline failed to accurately find the lane lines, often finding a line to the seam instead. 
+Another 
+#### probable of hypythetical 
+point of failure would be the introduction of additional lines and features on the road, such as old faded lane lines, cracks,  seams, or even shawdows cast from power lines or bridges. Because the lane line segmentation used the gradient/ derivative of the black-and-white image find lines, areas where there is sharp changes in neighboring pixel values, such as these additional lines and features,  would show up in the gradient. In fact, the challenge_video.mp4 has a seam in the road. The pipeline was tested using the challenge video and the pipeline failed to accurately find the lane lines, often finding a line to the seam instead. 
 
 Another method to segment out the lane lines when creating a binary image was attempted. The idea was to segment lane lines based on color (e.g. yellow and white), as described in [Changing Colorspace](http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_colorspaces/py_colorspaces.html#converting-colorspaces). The funtion `get_color_2_binary()`, in section "Functions for Image Manipulation", converted a RGB image to HSV color space. It used a lower and upper threshold for yellow (in HSV space) and white (in RGB space) to threshold the HSV and RGB images using `cv2.inRange()` to produce two binary images (0 and 255). These images were logically ORed together and passed throught the rest of the pipeline for line fitting. Figure 7 shows the driving lane successfully marked using this method.
 
 #### [Figure 7. Lane Marking Using Color-Based Line Segmentation]
 
-<img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/LineSeg_by_Color.png" height="480" width="640" />
+<img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/LineSeg_by_Color.png" height="357" width="1167" />
 
-While line segementaion was successful using test images, it broke down during video processing and failed to mark the lane lines altogether during the middle of the video. Further exploration of this method is warranted, however.
+While line segementaion was successful using test images, it broke down during video processing and failed to mark the lane lines altogether during the middle of the video. Further exploration of this method is warranted, to make the pipeline more robust and immune to color, shawdowing/lighting changes in the road. With more robust line segmentation the use of `find_lane_lines_quick()` would increase speed of frame processing. 
 
 
 
