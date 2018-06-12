@@ -87,17 +87,17 @@ Finally, in the pipeline a single-channel binary image was created by logical OR
 
 A perspective transformation was performed on the binary image using the function `warp_img()` in section "Functions for Image Manipulation". The function takes in source points (src_pts) and destination points (dst_pts) to calculate a transormation matrix (M) using the function `cv2.getPerspectiveTransormation()`.  The matrix is then used with `cv2.warpPerspective()` to warp the binary image.
 
-Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting. Therefore, the src_pts and dst_pts (Table 1) were determined through trial-and-error. Figures 5 show a straight image and the lane lines after the perspective transformation of it's binary image. 
+Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting. Therefore, the src_pts and dst_pts were determined through trial-and-error. The original points shifted the image too far off-center resulting bad offset caclulations(see below). So, new point were determined (Table 1) to center to warped lane lines about the middle of the x-axis. Figures 5 show a straight image and the lane lines after the perspective transformation of it's binary image. 
 
 
 [Table 1: Source and Destination Points for Matrix Transformation]
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 490, 510      | 340, 470      | 
-| 790, 510      | 1180, 470     |
-| 250, 670      | 375, 670      |
-| 1030, 670     | 1180, 670     |
+| 500, 500      | 125, 460      | 
+| 790, 510      | 1075, 480     |
+| 200, 670      | 125, 670      |
+| 1030, 670     | 1050, 670     |
 
 
 
