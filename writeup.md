@@ -153,7 +153,7 @@ During video processing the offset was drawn on each frame using `cv2.putText()`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-<a href="https://youtu.be/L9F9vf5eXEs" target="_blank"><img src="https://i9.ytimg.com/vi/L9F9vf5eXEs/1.jpg?sqp=CPiRltgF&rs=AOn4CLCoHE3zWpikt4utLocnua25ndqq-w" alt="Advanced Lane Finding Video" width="240" height="180" border="10" /></a>
+<a href="https://youtu.be/5CpfkBziwqc" target="_blank"><img src="https://i.ytimg.com/vi/5CpfkBziwqc/3.jpg" alt="Advanced Lane Finding Video" width="240" height="180" border="10" /></a>
 ---
 
 ### Discussion
