@@ -74,12 +74,14 @@ Originally, the ROI points were used for src_pts while the dst_pts were derived 
 
 [Table 1: Source and Destination Points for Matrix Transformation]
 
+
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 490, 510      | 340, 470      | 
-| 790, 510      | 1180, 470     |
-| 250, 670      | 375, 670      |
-| 1030, 670     | 1180, 670     |
+| 500, 500      | 125, 460      | 
+| 790, 510      | 1075, 480     |
+| 200, 670      | 125, 670      |
+| 1030, 670     | 1050, 670     |
+
 
 
 
@@ -110,7 +112,7 @@ The radius of the curve was calculated during the lane line polynomial fitting u
 
 `Radius of curve =( (1+(2Ay+B)2)3/2 ) / ∣2A∣`
 
-To convert pixel to meters, the variables ym_per_pix = 30/720 and self.xm_per_pix = 3.7/700 were used to multiply the x- and y-values of the lane lines during polynomial fitting.  A 3-point weighted average was used to smooth radius calculations during video processing. The radius of the curve was drawn on the each frame of the video using `cv2.putText()`.
+To convert pixel to meters, the variables ym_per_pix = 30/720 and self.xm_per_pix = 3.7/850 were used to multiply the x- and y-values of the lane lines during polynomial fitting.  A 3-point weighted average was used to smooth radius calculations during video processing. The radius of the curve was drawn on the each frame of the video using `cv2.putText()`.
 
 ---
 
