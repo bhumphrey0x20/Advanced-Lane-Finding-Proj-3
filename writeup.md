@@ -87,7 +87,7 @@ Finally, in the pipeline a single-channel binary image was created by logical OR
 
 A perspective transformation was performed on the binary image using the function `warp_img()` in section "Functions for Image Manipulation". The function takes in source points (src_pts) and destination points (dst_pts) to calculate a transormation matrix (M) using the function `cv2.getPerspectiveTransormation()`.  The matrix is then used with `cv2.warpPerspective()` to warp the binary image.
 
-Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting. Therefore, the src_pts and dst_pts were determined through trial-and-error. The original points shifted the image too far off-center resulting bad offset caclulations(see below). So, new point were determined (Table 1) to center to warped lane lines about the middle of the x-axis. Figures 5 show a straight image and the lane lines after the perspective transformation of it's binary image. 
+Originally, the ROI points were used for src_pts while the dst_pts were derived from src_pts values, however the transformation was not acceptable resulting in poor line fitting. Therefore, the src_pts and dst_pts were determined through trial-and-error. The original points shifted the image too far off-center resulting bad offset caclulations (see below). So, new points were determined (Table 1) to center to warped lane lines about the middle of the x-axis. The approximate pixel distance between lane lines was about 850 pixels (200 pixels to 1050 pixels). Figures 5 show a straight image and the lane lines after the perspective transformation.  
 
 
 [Table 1: Source and Destination Points for Matrix Transformation]
@@ -101,8 +101,12 @@ Originally, the ROI points were used for src_pts while the dst_pts were derived 
 
 
 
-#### Figure 5: Binary Images of Unwarped and Warped Perspective 
-<img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/output_images/bin_warp2.png" height="349" width="918" />
+#### Figure 5: RGB and Binary Images of Unwarped and Warped Lane Lines 
+<img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/redo_straight.png" height="240" width="320" />
+<img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/redo_straight_warp.png" height="240" width="320" />
+<img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/redo_straight_bin.png" height="240" width="320" />
+
+<img src="https://github.com/bhumphrey0x20/Advanced-Lane-Finding-Proj-3/blob/master/redo_straight_bin_warp.png" height="240" width="320" />
 
 
 
@@ -137,9 +141,9 @@ The radius of the curve was calculated during the lane line polynomial fitting u
 
 #### [Equation 2]    `Radius of curve =( (1+(2Ay+B)^2)^3/2 ) / ∣2A∣`
 
-To convert pixel to meters, the variables ym_per_pix = 30/720 and self.xm_per_pix = 3.7/700 were used to multiply the x- and y-values of the lane lines during polynomial fitting.  A 3-point weighted average was used to smooth radius calculations during video processing. The radius of the curve was drawn on the each frame of the video using `cv2.putText()`.
+To convert pixel to meters, the variables ym_per_pix = 30/720 and self.xm_per_pix = 3.7/850 were used to multiply the x- and y-values of the lane lines during polynomial fitting.  A 3-point weighted average was used to smooth radius calculations during video processing. The radius of the curve was drawn on the each frame of the video using `cv2.putText()`.
 
-The vehicle's offset (position of the vehicle with respect to the center of the lane) was calculated by finding the average center line then subtracting it from  the mid-point of the x-axis, assumed to be the actual center of the lane. The Line class function `calculate_offset()` used the rolling average polynomial coefficients, calculated from the radius of the curve, to calculate a center line according to Equation 1. The function used a y-value corresponding the bottom of the curve to obtain the position of the vehicle between the left and right lane lines. The y-value was converted into meters by multiplying it by `ym_per_px= 30/720`. The mid-point of the x-axis was converted to meters by mulitplying it by `xm_per_px = 3.7/700`. 
+The vehicle's offset (position of the vehicle with respect to the center of the lane) was calculated by finding the average center line then subtracting it from  the mid-point of the x-axis, assumed to be the actual center of the lane. The Line class function `calculate_offset()` used the rolling average polynomial coefficients, calculated from the radius of the curve, to calculate a center line according to Equation 1. The function used a y-value corresponding the bottom of the curve to obtain the position of the vehicle between the left and right lane lines. The y-value was converted into meters by multiplying it by `ym_per_px= 30/720`. The mid-point of the x-axis was converted to meters by mulitplying it by `xm_per_px = 3.7/850`. 
 
 During video processing the offset was drawn on each frame using `cv2.putText()`. Offsets with a negative value indicate the vehicle's center is right of the mid-point, while positive offsets indicate the vehicle's center is to the left of the mid-point. During the video the offset values were typically near -1 meters.
  
